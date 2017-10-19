@@ -1,0 +1,61 @@
+---
+title: "pmap"
+author: "jasper"
+date: "October 19, 2017"
+output: html_document
+---
+
+```{r}
+jasperw_315_themeSLANT <- theme_bw() + theme(panel.background = element_rect(fill = "white", color = "white", size = 4),
+                                        panel.grid.major = element_line(colour = "white"),
+                                        panel.grid.minor = element_line(colour = "white"),
+                                        axis.text.x = element_text(angle = 45, hjust = 1, size = 12)
+                                        )
+
+jasperw_315_theme <- theme_bw() + theme(panel.background = element_rect(fill = "white", color = "white", size = 4),
+                                        panel.grid.major = element_line(colour = "white"),
+                                        panel.grid.minor = element_line(colour = "white")
+                                        )
+```
+
+Reading in the PmapInput
+```{r}
+library(foreign)
+db = file.choose()
+dataset = read.csv(db, row.names = 1, header = T)
+
+dim(dataset)
+names(dataset)
+head(dataset)
+
+pc.cr <- princomp(dataset, cor = T)
+```
+
+No ggplot code
+```{r}
+library(MASS)
+library(ggplot2)
+pc.cr <-princomp(USArrests, cor = TRUE)# scale data
+summary(pc.cr)
+head(pc.cr)
+biplot(pc.cr)
+```
+
+
+
+Ggplot code
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(MASS)
+library(ggplot2)
+
+
+#library(devtools)
+#install_github("vqv/ggbiplot")
+library(ggbiplot)
+ggbiplot(pc.cr, labels = rownames(dataset)) + jasperw_315_theme +
+    scale_fill_brewer(palette="Spectral")
+
+```
+
